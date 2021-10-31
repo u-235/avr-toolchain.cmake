@@ -1,4 +1,8 @@
 
+2021-10-31 u-235 <nicegorov@yandex.com>
+    - Creating cmake/avr-gcc-toolchain.cmake
+      This module configures the basic variables for using AVR GCC in CMake.
+
 2021-10-29 u-235 <nicegorov@yandex.com>
     - Creating a project.
 
