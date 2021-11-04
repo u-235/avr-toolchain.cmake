@@ -6,6 +6,8 @@
 
 The following variables are changed in this module:
 
+- AVR_TOOLCHAIN_FILES_VERSION
+
 - CMAKE_SYSTEM_NAME      = Generic
 - CMAKE_SYSTEM_PROCESSOR = AVR
 
@@ -18,7 +20,6 @@ The following variables are changed in this module:
 - AVR_TOOLCHAIN_CXX_COMPILER
 
 - CMAKE_C_COMPILER
-- CMAKE_C_COMPILER_VERSION
 - CMAKE_C_FLAGS                cleared
 - CMAKE_C_FLAGS_DEBUG          cleared
 - CMAKE_C_FLAGS_RELEASE        cleared
@@ -26,7 +27,6 @@ The following variables are changed in this module:
 - CMAKE_C_FLAGS_RELWITHDEBINFO cleared
 
 - CMAKE_CXX_COMPILER
-- CMAKE_CXX_COMPILER_VERSION
 - CMAKE_CXX_FLAGS                cleared
 - CMAKE_CXX_FLAGS_DEBUG          cleared
 - CMAKE_CXX_FLAGS_RELEASE        cleared
@@ -41,8 +41,8 @@ The following variables are changed in this module:
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/modules)
 
-set(AVR_TOOLCHAIN_ID      GNU)
-set(AVR_TOOLCHAIN_VERSION 0.3)
+set(AVR_TOOLCHAIN_ID            GNU)
+set(AVR_TOOLCHAIN_FILES_VERSION 0.3)
 
 set(CMAKE_SYSTEM_NAME      Generic)
 set(CMAKE_SYSTEM_PROCESSOR AVR)
@@ -55,19 +55,16 @@ set(CMAKE_CXX_COMPILER    ${AVR_TOOLCHAIN_CXX_COMPILER})
 # Get GCC version.
 execute_process(COMMAND ${CMAKE_C_COMPILER} --version OUTPUT_VARIABLE _VERSION ERROR_VARIABLE _VERSION)
 
-if("${_VERSION}" MATCHES "\\(GCC\\) ([0-9]+\\.[0-9]+\\.[0-9]+)")
-    set(_VERSION ${CMAKE_MATCH_1})
-    set(CMAKE_C_COMPILER_VERSION ${_VERSION})
-    set(CMAKE_CXX_COMPILER_VERSION ${_VERSION})
-    set(CMAKE_ASM_COMPILER_VERSION ${_VERSION})
-endif()
+if ("${_VERSION}" MATCHES "\\(.*\\) ([0-9]+\\.[0-9]+\\.[0-9]+)")
+    set(AVR_TOOLCHAIN_VERSION ${CMAKE_MATCH_1})
+endif ()
+
+unset(_VERSION)
 
 # Set AVR_TOOLCHAIN_ROOT_DIR and AVR_TOOLCHAIN_AVR_DIR
 get_filename_component(AVR_TOOLCHAIN_ROOT_DIR "${AVR_TOOLCHAIN_C_COMPILER}" DIRECTORY)
 get_filename_component(AVR_TOOLCHAIN_ROOT_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/../" ABSOLUTE)
-get_filename_component(AVR_TOOLCHAIN_AVR_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${_VERSION}" ABSOLUTE)
-
-unset(_VERSION)
+get_filename_component(AVR_TOOLCHAIN_AVR_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${AVR_TOOLCHAIN_VERSION}" ABSOLUTE)
 
 
 #
@@ -143,7 +140,8 @@ unset(_DECORATES_LIST)
 
 macro(avr_print_toolchain_status)
     message("[AVR GCC toolchain status]")
-    message("  version           ${AVR_TOOLCHAIN_VERSION}")
+    message("  cmake toolchain version  ${AVR_TOOLCHAIN_FILES_VERSION}")
+    message("  GCC version              ${AVR_TOOLCHAIN_VERSION}")
     message("  install dir       ${AVR_TOOLCHAIN_ROOT_DIR}")
     message("  avr toolchain dir ${AVR_TOOLCHAIN_AVR_DIR}")
     message("  avr C compiler    ${AVR_TOOLCHAIN_C_COMPILER}")
