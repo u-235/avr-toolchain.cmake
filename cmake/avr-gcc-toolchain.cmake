@@ -14,7 +14,8 @@ The following variables are changed in this module:
 - AVR_TOOLCHAIN_ID       = GNU
 - AVR_TOOLCHAIN_VERSION
 - AVR_TOOLCHAIN_ROOT_DIR in Linux usually /usr or /usr/local
-- AVR_TOOLCHAIN_AVR_DIR  = ${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${AVR_TOOLCHAIN_VERSION}
+- AVR_TOOLCHAIN_SUFFIX  = gcc/avr/${AVR_TOOLCHAIN_VERSION}
+- AVR_PREFIX_PATH
 
 - AVR_TOOLCHAIN_C_COMPILER
 - AVR_TOOLCHAIN_CXX_COMPILER
@@ -40,6 +41,7 @@ The following variables are changed in this module:
 
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/modules)
+list(REMOVE_DUPLICATES CMAKE_MODULE_PATH)
 
 set(AVR_TOOLCHAIN_ID            GNU)
 set(AVR_TOOLCHAIN_FILES_VERSION 0.3)
@@ -61,10 +63,15 @@ endif ()
 
 unset(_VERSION)
 
-# Set AVR_TOOLCHAIN_ROOT_DIR and AVR_TOOLCHAIN_AVR_DIR
+# Set AVR_TOOLCHAIN_ROOT_DIR and AVR_TOOLCHAIN_SUFFIX
 get_filename_component(AVR_TOOLCHAIN_ROOT_DIR "${AVR_TOOLCHAIN_C_COMPILER}" DIRECTORY)
 get_filename_component(AVR_TOOLCHAIN_ROOT_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/../" ABSOLUTE)
-get_filename_component(AVR_TOOLCHAIN_AVR_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${AVR_TOOLCHAIN_VERSION}" ABSOLUTE)
+# Older versions of GCC have a <ROOT>/lib/gcc/avr<GCC_VERSION> folder.
+# Modern versions have additional folder <ROOT>/libexec/gcc/avr/<GCC_VERSION>.
+set(AVR_TOOLCHAIN_SUFFIX "gcc/avr/${AVR_TOOLCHAIN_VERSION}")
+# List of folders where AVR GNU TOOLCHAIN components are searched.
+list(APPEND AVR_PREFIX_PATH "${AVR_TOOLCHAIN_ROOT_DIR}" "${CMAKE_PREFIX_PATH}")
+list(REMOVE_DUPLICATES AVR_PREFIX_PATH)
 
 
 #
@@ -143,7 +150,7 @@ macro(avr_print_toolchain_status)
     message("  cmake toolchain version  ${AVR_TOOLCHAIN_FILES_VERSION}")
     message("  GCC version              ${AVR_TOOLCHAIN_VERSION}")
     message("  install dir       ${AVR_TOOLCHAIN_ROOT_DIR}")
-    message("  avr toolchain dir ${AVR_TOOLCHAIN_AVR_DIR}")
+    message("  toolchain suffix  ${AVR_TOOLCHAIN_SUFFIX}")
     message("  avr C compiler    ${AVR_TOOLCHAIN_C_COMPILER}")
     message("  avr C++ compiler  ${AVR_TOOLCHAIN_CXX_COMPILER}")
     message("  CMake C compiler     ${CMAKE_C_COMPILER}")
