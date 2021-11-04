@@ -11,7 +11,7 @@ The following variables are changed in this module:
 
 - AVR_TOOLCHAIN_ID       = GNU
 - AVR_TOOLCHAIN_VERSION
-- AVR_TOOLCHAIN_ROOT_DIR in Linux isualy /usr or /usr/local
+- AVR_TOOLCHAIN_ROOT_DIR in Linux usually /usr or /usr/local
 - AVR_TOOLCHAIN_AVR_DIR  = ${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${AVR_TOOLCHAIN_VERSION}
 
 - AVR_TOOLCHAIN_C_COMPILER
@@ -33,14 +33,6 @@ The following variables are changed in this module:
 - CMAKE_CXX_FLAGS_MINSIZEREL     cleared
 - CMAKE_CXX_FLAGS_RELWITHDEBINFO cleared
 
-- CMAKE_ASM_COMPILER
-- CMAKE_ASM_COMPILER_VERSION
-- CMAKE_ASM_FLAGS                cleared
-- CMAKE_ASM_FLAGS_DEBUG          cleared
-- CMAKE_ASM_FLAGS_RELEASE        cleared
-- CMAKE_ASM_FLAGS_MINSIZEREL     cleared
-- CMAKE_ASM_FLAGS_RELWITHDEBINFO cleared
-
 - CMAKE_FIND_LIBRARY_PREFIXES
 - CMAKE_FIND_LIBRARY_SUFFIXES
 
@@ -59,7 +51,6 @@ find_program(AVR_TOOLCHAIN_C_COMPILER   avr-gcc REQUIRED)
 find_program(AVR_TOOLCHAIN_CXX_COMPILER avr-g++ REQUIRED)
 set(CMAKE_C_COMPILER      ${AVR_TOOLCHAIN_C_COMPILER})
 set(CMAKE_CXX_COMPILER    ${AVR_TOOLCHAIN_CXX_COMPILER})
-set(CMAKE_ASM_COMPILER    ${AVR_TOOLCHAIN_C_COMPILER})
 
 # Get GCC version.
 execute_process(COMMAND ${CMAKE_C_COMPILER} --version OUTPUT_VARIABLE _VERSION ERROR_VARIABLE _VERSION)
@@ -77,6 +68,7 @@ get_filename_component(AVR_TOOLCHAIN_ROOT_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/../" AB
 get_filename_component(AVR_TOOLCHAIN_AVR_DIR "${AVR_TOOLCHAIN_ROOT_DIR}/lib/gcc/avr/${_VERSION}" ABSOLUTE)
 
 unset(_VERSION)
+
 
 #
 # Section Platform
@@ -101,6 +93,7 @@ __avr_decorate(STATIC_LIBRARY "lib" ".a")
 
 set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ".so")
+
 
 #
 # Section Platform-GNU
@@ -145,7 +138,6 @@ endmacro()
 
 __avr_toolset_configure(C)
 __avr_toolset_configure(CXX)
-__avr_toolset_configure(ASM)
 
 unset(_DECORATES_LIST)
 
@@ -162,7 +154,4 @@ macro(avr_print_toolchain_status)
     message("  CMake C++ compiler     ${CMAKE_CXX_COMPILER}")
     message("  CMake C++ compiler id  ${CMAKE_CXX_COMPILER_ID}")
     message("  CMake C++ compiler ver ${CMAKE_CXX_COMPILER_VERSION}")
-    message("  CMake ASM compiler     ${CMAKE_ASM_COMPILER}")
-    message("  CMake ASM compiler id  ${CMAKE_ASM_COMPILER_ID}")
-    message("  CMake ASM compiler ver ${CMAKE_ASM_COMPILER_VERSION}")
 endmacro()
