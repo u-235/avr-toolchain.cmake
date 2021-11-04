@@ -103,7 +103,13 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ".so")
 # Section Platform-GNU
 ##########################################
 
-find_library(_AR_PLUGIN_LTO NAMES lto_plugin PATHS ${AVR_TOOLCHAIN_AVR_DIR})
+find_library(_AR_PLUGIN_LTO lto_plugin HINTS
+        ${AVR_TOOLCHAIN_ROOT_DIR}/lib/${AVR_TOOLCHAIN_SUFFIX}
+        ${AVR_TOOLCHAIN_ROOT_DIR}/libexec/${AVR_TOOLCHAIN_SUFFIX}
+        NO_CMAKE_ENVIRONMENT_PATH
+        NO_CMAKE_PATH
+        NO_SYSTEM_ENVIRONMENT_PATH
+        NO_CMAKE_SYSTEM_PATH)
 
 set(_AR_FLAGS "")
 
