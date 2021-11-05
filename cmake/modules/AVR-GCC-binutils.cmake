@@ -9,7 +9,7 @@ The following variables are changed in this module:
 - AVR_BINUTILS_ID      = GNU
 - AVR_BINUTILS_VERSION
 - AVR_BINUTILS_ROOT_DIR in Linux usually /usr or /usr/local
-- AVR_BINUTILS_AVR_DIR  = ${AVR_BINUTILS_ROOT_DIR}/lib/avr
+- AVR_BINUTILS_SUFFIX   = lib/avr or avr
 
 - AVR_BINUTILS_AR
 - AVR_BINUTILS_AS
@@ -45,9 +45,23 @@ set(__AVR_GCC_BINUTILS 1)
 
 set(AVR_BINUTILS_ID GNU)
 
+include(${CMAKE_CURRENT_LIST_DIR}/utils.cmake)
+
+__find_folder(BINUTILS PATHS ${AVR_PREFIX_PATH} SUFFIXES libexec/avr lib/avr avr FILE bin)
+
+if (NOT AVR_BINUTILS_ROOT_DIR)
+    __avr_fatal_error("could not find binutils")
+endif ()
+
 macro(__find_programm var name)
-    find_program(AVR_BINUTILS_${var} avr-${name} REQUIRED)
-    get_filename_component(AVR_BINUTILS_${var} "${AVR_BINUTILS_${var}}" REALPATH)
+    find_program(AVR_BINUTILS_${var}
+            NAMES avr-${name} ${name}
+            HINTS ${AVR_BINUTILS_ROOT_DIR}/${AVR_BINUTILS_SUFFIX} ${AVR_BINUTILS_ROOT_DIR}
+            PATH_SUFFIXES bin
+            NO_CMAKE_ENVIRONMENT_PATH
+            NO_CMAKE_PATH
+            NO_SYSTEM_ENVIRONMENT_PATH
+            NO_CMAKE_SYSTEM_PATH)
 endmacro()
 
 foreach( arg
@@ -65,18 +79,15 @@ if("${_VERSION}" MATCHES "\\(.*\\) ([0-9]+\\.[0-9]+)")
 endif()
 unset(_VERSION)
 
-get_filename_component(AVR_BINUTILS_AVR_DIR "${AVR_BINUTILS_AS}" REALPATH)
-get_filename_component(AVR_BINUTILS_AVR_DIR "${AVR_BINUTILS_AVR_DIR}" DIRECTORY)
-get_filename_component(AVR_BINUTILS_AVR_DIR "${AVR_BINUTILS_AVR_DIR}/../" ABSOLUTE)
-get_filename_component(AVR_BINUTILS_ROOT_DIR "${AVR_BINUTILS_AVR_DIR}/../../" ABSOLUTE)
-
-set(CMAKE_AR       ${AVR_BINUTILS_AR})
-set(CMAKE_LINKER   ${AVR_BINUTILS_LD})
-set(CMAKE_NM       ${AVR_BINUTILS_NM})
-set(CMAKE_OBJCOPY  ${AVR_BINUTILS_OBJCOPY})
-set(CMAKE_OBJDUMP  ${AVR_BINUTILS_OBJDUMP})
-set(CMAKE_RANLIB   ${AVR_BINUTILS_RANLIB})
-set(CMAKE_STRIP    ${AVR_BINUTILS_STRIP})
+if (AVR_BINUTILS_REDEFINE)
+    set(CMAKE_AR       ${AVR_BINUTILS_AR})
+    set(CMAKE_LINKER   ${AVR_BINUTILS_LD})
+    set(CMAKE_NM       ${AVR_BINUTILS_NM})
+    set(CMAKE_OBJCOPY  ${AVR_BINUTILS_OBJCOPY})
+    set(CMAKE_OBJDUMP  ${AVR_BINUTILS_OBJDUMP})
+    set(CMAKE_RANLIB   ${AVR_BINUTILS_RANLIB})
+    set(CMAKE_STRIP    ${AVR_BINUTILS_STRIP})
+endif ()
 
 __avr_print_status("Found GNU binutils for AVR version ${AVR_BINUTILS_VERSION}")
 
@@ -84,7 +95,7 @@ macro(avr_print_binutils_status)
     message("[AVR GCC binutils status]")
     message("  version          ${AVR_BINUTILS_VERSION}")
     message("  install dir      ${AVR_BINUTILS_ROOT_DIR}")
-    message("  avr binutils dir ${AVR_BINUTILS_AVR_DIR}")
+    message("  binutils suffix  ${AVR_BINUTILS_SUFFIX}")
 
     message("  avr-ar      ${AVR_BINUTILS_AR}")
     message("  avr-as      ${AVR_BINUTILS_AS}")
