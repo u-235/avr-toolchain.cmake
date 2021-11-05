@@ -60,7 +60,7 @@ endforeach()
 
 execute_process(COMMAND ${AVR_BINUTILS_AS} --version OUTPUT_VARIABLE _VERSION ERROR_VARIABLE _VERSION)
 
-if("${_VERSION}" MATCHES "\\(GNU Binutils\\) ([0-9]+\\.[0-9]+)")
+if("${_VERSION}" MATCHES "\\(.*\\) ([0-9]+\\.[0-9]+)")
     set(AVR_BINUTILS_VERSION ${CMAKE_MATCH_1})
 endif()
 unset(_VERSION)
