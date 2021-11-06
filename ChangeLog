@@ -1,4 +1,12 @@
 
+2021-11-06 u-235 <nicegorov@yandex.com>
+    - Creating cmake/modules/AVR-GCC-helper.cmake
+      Several functions for easy handling of AVR specifics.
+
+2021-11-05 u-235 <nicegorov@yandex.com>
+    - Creating cmake/modules/AVR-GCC-libc.cmake
+      This module looks for a standard library and finds out its version.
+
 2021-10-31 u-235 <nicegorov@yandex.com>
     - Creating cmake/avr-gcc-toolchain.cmake
       This module configures the basic variables for using AVR GCC in CMake.
