@@ -1,5 +1,10 @@
 
 2021-11-06 u-235 <nicegorov@yandex.com>
+    - Creating cmake/modules/FindAVR.cmake
+      The module provides a standard way to include the AVR-GCC-binutils,
+      AVR-GCC-libc and AVR-GCC-helper modules.
+
+2021-11-06 u-235 <nicegorov@yandex.com>
     - Creating cmake/modules/AVR-GCC-helper.cmake
       Several functions for easy handling of AVR specifics.
 
