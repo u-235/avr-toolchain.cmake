@@ -52,7 +52,7 @@ function(avr_create_mcu mcu)
     set_target_properties(${ARG_NAME} PROPERTIES
         INTERFACE_COMPILE_OPTIONS -mmcu=${mcu}
         INTERFACE_LINK_OPTIONS -mmcu=${mcu}
-        AVR_MCU_TYPE ${mcu})
+        INTERFACE_AVR_MCU_TYPE ${mcu})
 endfunction()
 
 
@@ -159,7 +159,7 @@ function(__avr_get_target_mcu_type out_var)
             continue()
         endif ()
 
-        get_target_property(type ${target} AVR_MCU_TYPE)
+        get_target_property(type ${target} INTERFACE_AVR_MCU_TYPE)
         if (type)
             break()
         endif ()
