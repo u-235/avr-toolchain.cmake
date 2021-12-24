@@ -20,7 +20,7 @@ The following variables are changed in this module:
 if (__AVR_GCC_LIBC)
     return()
 endif ()
-set(__AVR_GCC_LIBC)
+set(__AVR_GCC_LIBC 1)
 
 set(AVR_LIBC_ID GNU)
 

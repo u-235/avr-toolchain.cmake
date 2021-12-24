@@ -13,8 +13,6 @@ if (__AVR_UTILS)
 endif ()
 set(__AVR_UTILS 1)
 
-set(AVR_BINUTILS_ID GNU)
-
 #[==============================[
 Searches for a file in the specified folders.
 

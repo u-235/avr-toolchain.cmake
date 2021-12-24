@@ -77,11 +77,11 @@ mcu
 NAME name
     Optional, specifies the target name.
 DEFINES <name | name=value>
-    Optional, adds definitions passed to the compiler with -D keys.
+    Optional, adds definitions passes to the compiler with -D keys.
 OPTIONS option
-    Optional, adds options passed to the compiler.
+    Optional, adds options passes to the compiler.
 LINK_OPTIONS option
-    Optional, adds options passed to the linker.
+    Optional, adds options passes to the linker.
 
 Example
 ------------

@@ -22,7 +22,7 @@ Firmware upload to the microcontroller is not supported and there are no plans t
 
 ## What will be required
 
-CMake at least version 10. However, to use the `CMakePresets.json` presets file, version 20 or higher is required.
+CMake at least version 3.10. However, to use the `CMakePresets.json` presets file, version 3.20 or higher is required.
 
 ## Get started
 
